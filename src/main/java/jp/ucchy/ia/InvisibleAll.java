@@ -59,12 +59,14 @@ public class InvisibleAll extends JavaPlugin implements Listener {
         }
         Player player = (Player)sender;
         
-        Player[] otherPlayers = getServer().getOnlinePlayers();
+        Player[] onlinePlayers = getServer().getOnlinePlayers();
         
         if ( isOn ) {
             // 全てのプレイヤーを非表示にする
-            for ( Player other : otherPlayers ) {
-                player.hidePlayer(other);
+            for ( Player other : onlinePlayers ) {
+                if ( !other.isOp() ) {
+                    player.hidePlayer(other);
+                }
             }
             
             // コマンドを実行したユーザーを記録する
@@ -77,7 +79,7 @@ public class InvisibleAll extends JavaPlugin implements Listener {
             
         } else {
             // 全てのプレイヤーを表示にする
-            for ( Player other : otherPlayers ) {
+            for ( Player other : onlinePlayers ) {
                 player.showPlayer(other);
             }
             
@@ -98,13 +100,22 @@ public class InvisibleAll extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         
-        // 既にコマンドを実行しているプレイヤーからは、非表示に設定する
         Player logined = event.getPlayer();
         
-        for ( String name : commandOnPlayers ) {
-            Player commanded = getServer().getPlayerExact(name);
-            if ( commanded != null ) {
-                commanded.hidePlayer(logined);
+        if ( !logined.isOp() ) {
+            // 非OPの場合、既にコマンドを実行しているプレイヤーからは、非表示に設定する
+            for ( String name : commandOnPlayers ) {
+                Player commanded = getServer().getPlayerExact(name);
+                if ( commanded != null ) {
+                    commanded.hidePlayer(logined);
+                }
+            }
+            
+        } else {
+            // OPの場合、全てのプレイヤーから表示されるように設定する
+            Player[] onlinePlayers = getServer().getOnlinePlayers();
+            for ( Player other : onlinePlayers ) {
+                other.showPlayer(logined);
             }
         }
     }
