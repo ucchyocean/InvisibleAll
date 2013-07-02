@@ -47,17 +47,48 @@ public class InvisibleAll extends JavaPlugin implements Listener {
     public boolean onCommand(
             CommandSender sender, Command command, String label, String[] args) {
         
-        boolean isOn = true;
-        
-        if ( args.length >= 1 && args[0].equalsIgnoreCase("off") ) {
-            isOn = false;
-        }
-        
         if ( !(sender instanceof Player) ) {
             sender.sendMessage("このコマンドはゲーム内からしか実行できません。");
             return true;
         }
         Player player = (Player)sender;
+        
+        // mute の実行
+        if ( args.length >= 1 && args[0].equalsIgnoreCase("mute") ) {
+            if ( args.length == 1 ) {
+                sender.sendMessage("muteする場合は、非表示にするプレイヤーを指定してください。");
+                sender.sendMessage("usage: /" + label + " mute (PlayerName)");
+                return true;
+            }
+            
+            for ( int i=1; i<args.length; i++ ) {
+                Player target = getServer().getPlayerExact(args[i]);
+                if ( target != null ) {
+                    if ( target.isOp() ) {
+                        sender.sendMessage(target.getName() + "さんはOPなので非表示にできません。");
+                    } else if ( player.canSee(target) ) {
+                        player.hidePlayer(target);
+                        sender.sendMessage(target.getName() + "さんを非表示にしました。");
+                    } else {
+                        player.showPlayer(target);
+                        sender.sendMessage(target.getName() + "さんを表示しました。");
+                    }
+                } else {
+                    sender.sendMessage(args[i] + "というプレイヤーは見つかりません。");
+                }
+            }
+            
+            return true;
+        } 
+        
+        
+        // mute 以外のコマンドの実行
+        
+        boolean isOn = true;
+        
+        if ( args.length >= 1 && args[0].equalsIgnoreCase("off") ) {
+            isOn = false;
+        }
         
         Player[] onlinePlayers = getServer().getOnlinePlayers();
         

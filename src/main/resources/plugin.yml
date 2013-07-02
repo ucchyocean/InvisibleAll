@@ -1,6 +1,6 @@
 name: InvisibleAll
 main: jp.ucchy.ia.InvisibleAll
-version: 0.0.1
+version: 0.0.2
 author: ucchy
 description: 他者のプレイヤー全員を非表示にするコマンド、アスレチックイベント用のプラグイン
 #depend: []
@@ -8,10 +8,11 @@ description: 他者のプレイヤー全員を非表示にするコマンド、�
 commands:
   invisibleall:
     description: InvisibleAllのコマンド
-    aliases: ia
+    aliases: ['ia']
     usage: |
            /<command> on - 他者を全員非表示にする
            /<command> off - 上記の解除
+           /<command> mute (PlayerName) - 指定した人を表示/非表示にする
     permission: invisibleall
     permission-message: パーミッション "<permission>" が無いため、実行できません。
 permissions:
