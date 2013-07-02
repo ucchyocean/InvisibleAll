@@ -6,3 +6,4 @@ InvisibleAll
     `/ia on` - 他者を全員非表示にする<br />
     `/ia off` - 上記の解除<br />
     `/ia` - `/ia on` と同じです。<br />
+    `/ia mute (PlayerName)` - 指定したプレイヤーを単独で表示/非表示にします。<br />
